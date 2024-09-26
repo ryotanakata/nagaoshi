@@ -1,0 +1,10 @@
+# Exclude source code and test files
+src/
+index.test.ts
+
+# Exclude configuration and documentation files
+.eslintrc.json
+vitest.config.ts
+
+# Exclude unnecessary files
+.gitignore
