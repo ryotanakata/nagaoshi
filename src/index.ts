@@ -27,6 +27,12 @@ type NagaoshiKeyEvent = KeyboardEvent & {
 };
 
 /*
+ * デフォルトのインターバルとディレイ
+*/
+const DEFAULT_INTERVAL = 75;
+const DEFAULT_DELAY = 1000;
+
+/*
  * 長押しイベントを処理する
  *
  * @param {HTMLElement} element - イベントを設定する要素
@@ -40,8 +46,8 @@ const nagaoshi = (
   options: NagaoshiOptions = {}
 ): Function => {
   const {
-    interval = 75,
-    delay = 100,
+    interval = DEFAULT_INTERVAL,
+    delay = DEFAULT_DELAY,
     onStart,
     onFinish,
     onCancel
