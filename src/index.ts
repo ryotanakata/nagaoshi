@@ -119,7 +119,7 @@ const nagaoshi = (
   * @param {NagaoshiPointerEvent | NagaoshiKeyEvent} e - イベント
   * @returns {void}
   */
-  const executeActionOnce = (
+  const handleShortPress = (
     e: NagaoshiPointerEvent | NagaoshiKeyEvent
   ): void => {
     if (!isLongPress) {
@@ -146,14 +146,14 @@ const nagaoshi = (
       startLongPress(e);
     } else if (type === 'keyup') {
       isKeyDown = false;
-      executeActionOnce(e);
+      handleShortPress(e);
     }
   };
 
 
   /* addEventListerner と removeEventListener　に同一の関数を渡すために on~でラップ */
   const onPointerDown = (e: PointerEvent):void => startLongPress(e as NagaoshiPointerEvent);
-  const onPointerUp = (e: PointerEvent):void => executeActionOnce(e as NagaoshiPointerEvent);
+  const onPointerUp = (e: PointerEvent):void => handleShortPress(e as NagaoshiPointerEvent);
   const onPointerLeave = (e: PointerEvent):void => stopLongPress(e as NagaoshiPointerEvent, true);
   const onPointerCancel = (e: PointerEvent):void => stopLongPress(e as NagaoshiPointerEvent, true);
   const onKeyDown = (e: KeyboardEvent):void => handleKeyAction(e as NagaoshiKeyEvent);
