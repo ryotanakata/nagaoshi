@@ -184,3 +184,75 @@ const nagaoshi = (
     element.removeEventListener('keyup', onKeyUp);
   };
 };
+
+/*
+ * インタラクティブな要素を検索
+ *
+ * @param {Node | null} element - 検索する要素
+ * @returns {HTMLElement | null} インタラクティブな要素
+*/
+const findInteractiveElement = (
+  element: Node | null
+): HTMLElement | null => {
+  return element instanceof Element
+    ? element.closest('button, a, input, textarea') as HTMLElement | null
+    : null;
+};
+
+/*
+ * 長押しを検知する
+ *
+ * @param {HTMLElement | null} element - イベントを設定する要素
+ * @returns {void}
+*/
+const handleLongPressDetection = (
+  element: HTMLElement | null
+): void => {
+  if (!element) return;
+
+  let timer : ReturnType<typeof setTimeout> | null = null;
+
+  /*
+  * 長押しタイマーをリセットする
+  *
+  * @returns {void}
+  */
+  const clearLongPressTimer = () => timer && clearTimeout(timer);
+
+  /*
+  * 長押しタイマーを開始する
+  *
+  * @returns {void}
+  */
+  const startLongPressTimer = (): void => {
+    if (timer) clearTimeout(timer);
+
+    timer = setTimeout(() => {
+      element.dispatchEvent(new CustomEvent('nagaoshi'));
+      element.removeEventListener("pointerdown", startLongPressTimer);
+      element.removeEventListener("pointerup", clearLongPressTimer);
+      element.removeEventListener("pointerleave", clearLongPressTimer);
+    }, DEFAULT_DELAY);
+  };
+
+  startLongPressTimer();
+  element.addEventListener("pointerdown", startLongPressTimer);
+  element.addEventListener("pointerup", clearLongPressTimer);
+  element.addEventListener("pointerleave", clearLongPressTimer);
+};
+
+/*
+ * handleLongPressDetectionをグローバルに登録
+　＊
+* @param {PointerEvent} e - イベント
+* @returns {void}
+*/
+document.addEventListener('pointerdown', (e: PointerEvent) => {
+  const element = findInteractiveElement(e.target as Node);
+
+  if (!element) return;
+
+  handleLongPressDetection(element);
+});
+
+export { nagaoshi };
