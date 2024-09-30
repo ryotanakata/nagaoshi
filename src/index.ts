@@ -76,7 +76,6 @@ const nagaoshi = (
       isLongPress = true;
       intervalId = setInterval(() => {
         action();
-        onFinish?.();
       }, interval);
     }, delay);
   };
@@ -100,6 +99,10 @@ const nagaoshi = (
     if (longPressTimeoutId !== null) {
       clearTimeout(longPressTimeoutId);
       longPressTimeoutId = null;
+    }
+
+    if (isLongPress) {
+      onFinish?.();
     }
 
     isLongPress = false;
