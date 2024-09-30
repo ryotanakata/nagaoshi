@@ -242,8 +242,8 @@ const handleLongPressDetection = (
 };
 
 /*
- * handleLongPressDetectionをグローバルに登録
-　＊
+* handleLongPressDetectionをグローバルに登録
+*
 * @param {PointerEvent} e - イベント
 * @returns {void}
 */
