@@ -42,21 +42,23 @@ const DEFAULT_DELAY = 1000;
  */
 const nagaoshi = (
   element: HTMLElement,
-  action: () => void = () => {},
-  options: NagaoshiOptions = {}
-): Function => {
+  action: () => void = () => {
+    // No-op function (デフォルトでは何もしません)
+  },
+  options: NagaoshiOptions = {},
+): (() => void) => {
   const {
     interval = DEFAULT_INTERVAL,
     delay = DEFAULT_DELAY,
     onStart,
     onFinish,
-    onCancel
+    onCancel,
   } = options;
 
   let longPressTimeoutId: ReturnType<typeof setTimeout> | null = null;
   let intervalId: ReturnType<typeof setInterval> | null = null;
-  let isLongPress: boolean = false;
-  let isKeyDown: boolean = false;
+  let isLongPress = false;
+  let isKeyDown = false;
 
   /*
    * Starts the long press (長押しを開始します)
@@ -64,12 +66,10 @@ const nagaoshi = (
    * @param {NagaoshiPointerEvent | NagaoshiKeyEvent} e - The event that triggered the long press (長押しをトリガーしたイベント)
    * @returns {void}
    */
-  const startLongPress = (
-    e: NagaoshiPointerEvent | NagaoshiKeyEvent
-  ): void => {
+  const startLongPress = (e: NagaoshiPointerEvent | NagaoshiKeyEvent): void => {
     onStart?.();
     if (e instanceof PointerEvent) {
-      (e.target as HTMLElement).setAttribute('aria-pressed', 'true');
+      (e.target as HTMLElement).setAttribute("aria-pressed", "true");
     }
 
     longPressTimeoutId = setTimeout(() => {
@@ -89,7 +89,7 @@ const nagaoshi = (
    */
   const stopLongPress = (
     e: NagaoshiPointerEvent | NagaoshiKeyEvent,
-    isCancelled = false
+    isCancelled = false,
   ): void => {
     if (intervalId !== null) {
       clearInterval(intervalId);
@@ -108,7 +108,7 @@ const nagaoshi = (
     isLongPress = false;
 
     if (e instanceof PointerEvent) {
-      (e.target as HTMLElement).setAttribute('aria-pressed', 'false');
+      (e.target as HTMLElement).setAttribute("aria-pressed", "false");
     }
 
     if (isCancelled) {
@@ -123,7 +123,7 @@ const nagaoshi = (
    * @returns {void}
    */
   const handleShortPress = (
-    e: NagaoshiPointerEvent | NagaoshiKeyEvent
+    e: NagaoshiPointerEvent | NagaoshiKeyEvent,
   ): void => {
     if (!isLongPress) {
       action();
@@ -140,34 +140,39 @@ const nagaoshi = (
    */
   const handleKeyAction = (e: NagaoshiKeyEvent): void => {
     const { key, type } = e;
-    const isEnterOrSpace = key === 'Enter' || key === ' ';
+    const isEnterOrSpace = key === "Enter" || key === " ";
 
     if (!isEnterOrSpace) return;
 
-    if (type === 'keydown' && !isKeyDown) {
+    if (type === "keydown" && !isKeyDown) {
       isKeyDown = true;
       startLongPress(e);
-    } else if (type === 'keyup') {
+    } else if (type === "keyup") {
       isKeyDown = false;
       handleShortPress(e);
     }
   };
 
-
   /* addEventListener and removeEventListener wrapped with on~ for consistency (addEventListener と removeEventListener に同一の関数を渡すために on~でラップ) */
-  const onPointerDown = (e: PointerEvent):void => startLongPress(e as NagaoshiPointerEvent);
-  const onPointerUp = (e: PointerEvent):void => handleShortPress(e as NagaoshiPointerEvent);
-  const onPointerLeave = (e: PointerEvent):void => stopLongPress(e as NagaoshiPointerEvent, true);
-  const onPointerCancel = (e: PointerEvent):void => stopLongPress(e as NagaoshiPointerEvent, true);
-  const onKeyDown = (e: KeyboardEvent):void => handleKeyAction(e as NagaoshiKeyEvent);
-  const onKeyUp = (e: KeyboardEvent):void => handleKeyAction(e as NagaoshiKeyEvent);
+  const onPointerDown = (e: PointerEvent): void =>
+    startLongPress(e as NagaoshiPointerEvent);
+  const onPointerUp = (e: PointerEvent): void =>
+    handleShortPress(e as NagaoshiPointerEvent);
+  const onPointerLeave = (e: PointerEvent): void =>
+    stopLongPress(e as NagaoshiPointerEvent, true);
+  const onPointerCancel = (e: PointerEvent): void =>
+    stopLongPress(e as NagaoshiPointerEvent, true);
+  const onKeyDown = (e: KeyboardEvent): void =>
+    handleKeyAction(e as NagaoshiKeyEvent);
+  const onKeyUp = (e: KeyboardEvent): void =>
+    handleKeyAction(e as NagaoshiKeyEvent);
 
-  element.addEventListener('pointerdown', onPointerDown);
-  element.addEventListener('pointerup', onPointerUp);
-  element.addEventListener('pointerleave', onPointerLeave);
-  element.addEventListener('pointercancel', onPointerCancel);
-  element.addEventListener('keydown', onKeyDown);
-  element.addEventListener('keyup', onKeyUp);
+  element.addEventListener("pointerdown", onPointerDown);
+  element.addEventListener("pointerup", onPointerUp);
+  element.addEventListener("pointerleave", onPointerLeave);
+  element.addEventListener("pointercancel", onPointerCancel);
+  element.addEventListener("keydown", onKeyDown);
+  element.addEventListener("keyup", onKeyUp);
 
   /*
    * Returns a cleanup function that removes event listeners (イベントリスナーを解除するクリーンアップ関数を返します)
@@ -175,12 +180,12 @@ const nagaoshi = (
    * @returns {Function} Cleanup function (クリーンアップ関数)
    */
   return () => {
-    element.removeEventListener('pointerdown', onPointerDown);
-    element.removeEventListener('pointerup', onPointerUp);
-    element.removeEventListener('pointerleave', onPointerLeave);
-    element.removeEventListener('pointercancel', onPointerCancel);
-    element.removeEventListener('keydown', onKeyDown);
-    element.removeEventListener('keyup', onKeyUp);
+    element.removeEventListener("pointerdown", onPointerDown);
+    element.removeEventListener("pointerup", onPointerUp);
+    element.removeEventListener("pointerleave", onPointerLeave);
+    element.removeEventListener("pointercancel", onPointerCancel);
+    element.removeEventListener("keydown", onKeyDown);
+    element.removeEventListener("keyup", onKeyUp);
   };
 };
 
@@ -190,12 +195,13 @@ const nagaoshi = (
  * @param {Node | null} element - The element to search within (検索する要素)
  * @returns {HTMLElement | null} The found interactive element (見つかったインタラクティブな要素)
  */
-const findInteractiveElement = (
-  element: Node | null
-): HTMLElement | null => {
-  const string = 'a[href], button, details, embed, iframe, label, select, textarea, audio[controls], video[controls], img[usemap], input:not([type="hidden"])';
+const findInteractiveElement = (element: Node | null): HTMLElement | null => {
+  const string =
+    'a[href], button, details, embed, iframe, label, select, textarea, audio[controls], video[controls], img[usemap], input:not([type="hidden"])';
 
-  return element instanceof Element && element.matches(string) ? element as HTMLElement : null;
+  return element instanceof Element && element.matches(string)
+    ? (element as HTMLElement)
+    : null;
 };
 
 /*
@@ -204,12 +210,10 @@ const findInteractiveElement = (
  * @param {HTMLElement | null} element - The element to set the detection on (イベントを設定する要素)
  * @returns {void}
  */
-const handleLongPressDetection = (
-  element: HTMLElement | null
-): void => {
+const handleLongPressDetection = (element: HTMLElement | null): void => {
   if (!element) return;
 
-  let timer : ReturnType<typeof setTimeout> | null = null;
+  let timer: ReturnType<typeof setTimeout> | null = null;
 
   /*
    * Resets the long press timer (長押しタイマーをリセットします)
@@ -227,7 +231,7 @@ const handleLongPressDetection = (
     if (timer) clearTimeout(timer);
 
     timer = setTimeout(() => {
-      element.dispatchEvent(new CustomEvent('nagaoshi'));
+      element.dispatchEvent(new CustomEvent("nagaoshi"));
       element.removeEventListener("pointerdown", startLongPressTimer);
       element.removeEventListener("pointerup", clearLongPressTimer);
       element.removeEventListener("pointerleave", clearLongPressTimer);
@@ -246,7 +250,7 @@ const handleLongPressDetection = (
  * @param {PointerEvent} e - The event that triggered the detection (検知をトリガーしたイベント)
  * @returns {void}
  */
-document.addEventListener('pointerdown', (e: PointerEvent) => {
+document.addEventListener("pointerdown", (e: PointerEvent) => {
   const element = findInteractiveElement(e.target as Node);
 
   if (!element) return;
