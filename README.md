@@ -16,19 +16,19 @@ A lightweight utility for handling long press events in JavaScript.
 
   const button = document.querySelector("button");
 
-  nagaoshi(
-    button,
-    () => {
-      console.log("Long press detected!");
-    },
-    {
-      interval: 100,
-      delay: 500,
-      onStart: () => console.log("Long press started"),
-      onFinish: () => console.log("Long press finished"),
-      onCancel: () => console.log("Long press cancelled"),
-    }
-  );
+  const option = {
+    interval: 100,
+    delay: 500,
+    onStart: () => console.log("Long press started"),
+    onFinish: () => console.log("Long press finished"),
+    onCancel: () => console.log("Long press cancelled"),
+  };
+
+  const action = () => {
+    console.log("Long press detected!");
+  };
+
+  nagaoshi(button, action, option);
 </script>
 ```
 
