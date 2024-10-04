@@ -1,6 +1,6 @@
 /*
- * 長押しイベントのオプション
-*/
+ * Options for the long press event (長押しイベントのオプション)
+ */
 type NagaoshiOptions = {
   interval?: number;
   delay?: number;
@@ -10,8 +10,8 @@ type NagaoshiOptions = {
 };
 
 /*
- * 長押しイベントのポインターイベント
-*/
+ * Pointer event type for the long press event (長押しイベントのポインターイベントタイプ)
+ */
 type NagaoshiPointerEvent = PointerEvent & {
   target: HTMLElement & {
     setAttribute: (arg0: string, arg1: string) => void;
@@ -19,27 +19,27 @@ type NagaoshiPointerEvent = PointerEvent & {
 };
 
 /*
- * 長押しイベントのキーボードイベント
-*/
+ * Keyboard event type for the long press event (長押しイベントのキーボードイベントタイプ)
+ */
 type NagaoshiKeyEvent = KeyboardEvent & {
   key: string;
   type: string;
 };
 
 /*
- * デフォルトのインターバルとディレイ
-*/
+ * Default interval and delay (デフォルトのインターバルとディレイ)
+ */
 const DEFAULT_INTERVAL = 75;
 const DEFAULT_DELAY = 1000;
 
 /*
- * 長押しイベントを処理する
+ * Handles the long press event (長押しイベントを処理します)
  *
- * @param {HTMLElement} element - イベントを設定する要素
- * @param {Function} action - 長押し時に実行するアクション
- * @param {NagaoshiOptions} options - オプション
- * @returns {Function} クリーンアップ関数
-*/
+ * @param {HTMLElement} element - The element to set the event on (イベントを設定する要素)
+ * @param {Function} action - The action to execute on long press (長押し時に実行するアクション)
+ * @param {NagaoshiOptions} options - The options for the long press event (長押しイベントのオプション)
+ * @returns {Function} Cleanup function (クリーンアップ関数)
+ */
 const nagaoshi = (
   element: HTMLElement,
   action: () => void = () => {},
@@ -58,12 +58,12 @@ const nagaoshi = (
   let isLongPress: boolean = false;
   let isKeyDown: boolean = false;
 
-/*
- * 長押しを開始する
- *
- * @param {NagaoshiPointerEvent | NagaoshiKeyEvent} e - イベント
- * @returns {void}
-*/
+  /*
+   * Starts the long press (長押しを開始します)
+   *
+   * @param {NagaoshiPointerEvent | NagaoshiKeyEvent} e - The event that triggered the long press (長押しをトリガーしたイベント)
+   * @returns {void}
+   */
   const startLongPress = (
     e: NagaoshiPointerEvent | NagaoshiKeyEvent
   ): void => {
@@ -81,12 +81,12 @@ const nagaoshi = (
   };
 
   /*
-  * 長押しを停止する
-  *
-  * @param {NagaoshiPointerEvent | NagaoshiKeyEvent} e - イベント
-  * @param {boolean} isCancelled - キャンセルされたかどうか
-  * @returns {void}
-  */
+   * Stops the long press (長押しを停止します)
+   *
+   * @param {NagaoshiPointerEvent | NagaoshiKeyEvent} e - The event that triggered the stop (停止をトリガーしたイベント)
+   * @param {boolean} isCancelled - Whether the event was cancelled (イベントがキャンセルされたかどうか)
+   * @returns {void}
+   */
   const stopLongPress = (
     e: NagaoshiPointerEvent | NagaoshiKeyEvent,
     isCancelled = false
@@ -117,11 +117,11 @@ const nagaoshi = (
   };
 
   /*
-  * 長押しが始まる前に単一のアクションを実行
-  *
-  * @param {NagaoshiPointerEvent | NagaoshiKeyEvent} e - イベント
-  * @returns {void}
-  */
+   * Executes a single action before long press starts (長押しが始まる前に単一のアクションを実行します)
+   *
+   * @param {NagaoshiPointerEvent | NagaoshiKeyEvent} e - The event to handle (処理するイベント)
+   * @returns {void}
+   */
   const handleShortPress = (
     e: NagaoshiPointerEvent | NagaoshiKeyEvent
   ): void => {
@@ -133,11 +133,11 @@ const nagaoshi = (
   };
 
   /*
-  * キーボードイベントを処理する
-  *
-  * @param {NagaoshiKeyEvent} e - イベント
-  * @returns {void}
-  */
+   * Handles the keyboard events for long press (長押しのキーボードイベントを処理します)
+   *
+   * @param {NagaoshiKeyEvent} e - The keyboard event to handle (処理するキーボードイベント)
+   * @returns {void}
+   */
   const handleKeyAction = (e: NagaoshiKeyEvent): void => {
     const { key, type } = e;
     const isEnterOrSpace = key === 'Enter' || key === ' ';
@@ -154,7 +154,7 @@ const nagaoshi = (
   };
 
 
-  /* addEventListerner と removeEventListener　に同一の関数を渡すために on~でラップ */
+  /* addEventListener and removeEventListener wrapped with on~ for consistency (addEventListener と removeEventListener に同一の関数を渡すために on~でラップ) */
   const onPointerDown = (e: PointerEvent):void => startLongPress(e as NagaoshiPointerEvent);
   const onPointerUp = (e: PointerEvent):void => handleShortPress(e as NagaoshiPointerEvent);
   const onPointerLeave = (e: PointerEvent):void => stopLongPress(e as NagaoshiPointerEvent, true);
@@ -170,11 +170,10 @@ const nagaoshi = (
   element.addEventListener('keyup', onKeyUp);
 
   /*
-  * イベントリスナーを解除するクリーンアップ関数を返します。
-  * この関数は、コンポーネントが破棄されるときや、イベントハンドラが不要になったときに呼び出してください。
-  *
-  * @returns {Function} イベントリスナーを解除するための関数
-  */
+   * Returns a cleanup function that removes event listeners (イベントリスナーを解除するクリーンアップ関数を返します)
+   *
+   * @returns {Function} Cleanup function (クリーンアップ関数)
+   */
   return () => {
     element.removeEventListener('pointerdown', onPointerDown);
     element.removeEventListener('pointerup', onPointerUp);
@@ -186,11 +185,11 @@ const nagaoshi = (
 };
 
 /*
- * インタラクティブな要素を検索
+ * Searches for interactive elements (インタラクティブな要素を検索します)
  *
- * @param {Node | null} element - 検索する要素
- * @returns {HTMLElement | null} インタラクティブな要素
-*/
+ * @param {Node | null} element - The element to search within (検索する要素)
+ * @returns {HTMLElement | null} The found interactive element (見つかったインタラクティブな要素)
+ */
 const findInteractiveElement = (
   element: Node | null
 ): HTMLElement | null => {
@@ -200,11 +199,11 @@ const findInteractiveElement = (
 };
 
 /*
- * 長押しを検知する
+ * Detects long press (長押しを検知します)
  *
- * @param {HTMLElement | null} element - イベントを設定する要素
+ * @param {HTMLElement | null} element - The element to set the detection on (イベントを設定する要素)
  * @returns {void}
-*/
+ */
 const handleLongPressDetection = (
   element: HTMLElement | null
 ): void => {
@@ -213,17 +212,17 @@ const handleLongPressDetection = (
   let timer : ReturnType<typeof setTimeout> | null = null;
 
   /*
-  * 長押しタイマーをリセットする
-  *
-  * @returns {void}
-  */
+   * Resets the long press timer (長押しタイマーをリセットします)
+   *
+   * @returns {void}
+   */
   const clearLongPressTimer = () => timer && clearTimeout(timer);
 
   /*
-  * 長押しタイマーを開始する
-  *
-  * @returns {void}
-  */
+   * Starts the long press timer (長押しタイマーを開始します)
+   *
+   * @returns {void}
+   */
   const startLongPressTimer = (): void => {
     if (timer) clearTimeout(timer);
 
@@ -242,11 +241,11 @@ const handleLongPressDetection = (
 };
 
 /*
-* handleLongPressDetectionをグローバルに登録
-*
-* @param {PointerEvent} e - イベント
-* @returns {void}
-*/
+ * Registers handleLongPressDetection globally (handleLongPressDetectionをグローバルに登録します)
+ *
+ * @param {PointerEvent} e - The event that triggered the detection (検知をトリガーしたイベント)
+ * @returns {void}
+ */
 document.addEventListener('pointerdown', (e: PointerEvent) => {
   const element = findInteractiveElement(e.target as Node);
 
