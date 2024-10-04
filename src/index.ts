@@ -194,9 +194,9 @@ const nagaoshi = (
 const findInteractiveElement = (
   element: Node | null
 ): HTMLElement | null => {
-  return element instanceof Element
-    ? element.closest('button, a, input, textarea') as HTMLElement | null
-    : null;
+  const string = 'a[href], button, details, embed, iframe, label, select, textarea, audio[controls], video[controls], img[usemap], input:not([type="hidden"])';
+
+  return element instanceof Element && element.matches(string) ? element as HTMLElement : null;
 };
 
 /*
