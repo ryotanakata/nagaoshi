@@ -4,7 +4,8 @@ index.test.ts
 
 # Exclude configuration and documentation files
 .eslintrc.json
-vitest.config.ts
+jest.config.ts
+tsconfig.json
 
 # Exclude unnecessary files
 .gitignore
