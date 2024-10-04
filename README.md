@@ -6,8 +6,9 @@ A lightweight utility for handling long press events in JavaScript.
 
 ![Nagaoshi Demo: Long-press for continuous increment and decrement and reset](https://github.com/ryotanakata/nagaoshi/raw/main/docs/assets/demo.gif)
 
+### Using the nagaoshi function
+
 ```html
-<!-- Method 1: Using the nagaoshi function -->
 <button>Press and hold me</button>
 
 <script type="module">
@@ -29,8 +30,11 @@ A lightweight utility for handling long press events in JavaScript.
     }
   );
 </script>
+```
 
-<!-- Method 2: Using the custom 'nagaoshi' event -->
+### Using the custom 'nagaoshi' event
+
+```html
 <button>Press and hold me</button>
 
 <script>
