@@ -37,7 +37,9 @@ A lightweight utility for handling long press events in JavaScript.
 ```html
 <button>Press and hold me</button>
 
-<script>
+<script type="module">
+  import { nagaoshi } from "nagaoshi";
+
   const button = document.querySelector("button");
 
   button.addEventListener("nagaoshi", () => {
