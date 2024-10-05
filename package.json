@@ -1,7 +1,7 @@
 {
   "name": "nagaoshi",
-  "version": "1.0.0",
-  "description": "A simple and flexible long-press action handler for DOM elements",
+  "version": "1.0.1",
+  "description": "A simple and flexible long-press action handler for DOM elements.",
   "type": "module",
   "exports": "./dist/index.js",
   "module": "./dist/index.js",
@@ -21,11 +21,13 @@
   },
   "keywords": [
     "longpress",
+    "long-press",
     "dom",
     "event",
     "nagaoshi",
     "custom-event",
-    "javascript"
+    "javascript",
+    "typescript"
   ],
   "author": "ryotanakata",
   "license": "MIT",

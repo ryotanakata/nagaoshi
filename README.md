@@ -2,7 +2,7 @@
 
 **Simple** | **Robust** | **Universal** | **Vanilla-Friendly** | **Prototype-Ready**
 
-A lightweight utility for handling long press events in JavaScript.
+A simple and flexible long-press action handler for DOM elements.
 
 ![Nagaoshi Demo: Long-press for continuous increment and decrement and reset](https://github.com/ryotanakata/nagaoshi/raw/main/docs/assets/demo.gif)
 
