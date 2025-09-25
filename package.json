@@ -1,6 +1,6 @@
 {
   "name": "nagaoshi",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A simple and flexible long-press action handler for DOM elements.",
   "type": "module",
   "exports": "./dist/index.js",
